@@ -14,7 +14,7 @@ const routes = [
     props: route=>({ page: parseInt(route.query.page) || 1 })
   },
   {
-    path: '/event/:id',
+    path: '/events/:id',
     name: 'EventLayout',
     props: true,
     component: EventLayout,
@@ -36,10 +36,44 @@ const routes = [
       },
     ]
   },
+  /*==============Solution 1:
+  ===============*/
+  // {
+  //   path: '/event/:id',
+  //   redirect: () =>{ 
+  //     return {name: 'EventDetails' }  
+  //   },
+  //   children: [
+  //     {
+  //       path: 'register',
+  //       redirect: () => ( {name: 'EventRegister'} )
+  //     },
+  //     {
+  //       path: 'edit',
+  //       redirect: () => ( {name: 'EventEdit'} )
+  //     }
+  //   ]
+  // },
+
+  /*==============Solution 2:
+  ===============*/
   {
-    path: '/about',
+    path: '/event/:afterEvent(.*)',
+    redirect: (to)=>{
+      return {
+        path: '/events/' + to.params.afterEvent
+      }
+    },
+
+  },
+  {
+    path: '/about-us',
     name: 'About',
     component: About
+  },
+  {
+    path: '/about',
+    redirect: { name: 'About' }
   }
 ]
 
