@@ -5,6 +5,8 @@ import EventDetails from '../views/event/Details.vue'
 import EventRegister from '../views/event/Register.vue'
 import EventEdit from '../views/event/Edit.vue'
 import About from '../views/About.vue'
+import NotFound from '@/views/NotFound.vue'
+import NetworkError from '@/views/NetworkError.vue'
 
 const routes = [
   {
@@ -64,7 +66,6 @@ const routes = [
         path: '/events/' + to.params.afterEvent
       }
     },
-
   },
   {
     path: '/about-us',
@@ -74,7 +75,25 @@ const routes = [
   {
     path: '/about',
     redirect: { name: 'About' }
+  },
+  {
+    //match all routes that don't match an existing route
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: NotFound
+  },
+  {
+    path: '/404/:resource',
+    name: '404Resource',
+    component: NotFound,
+    props: true
+  },
+  {
+    path: '/network-error',
+    name: 'NetworkError',
+    component: NetworkError
   }
+
 ]
 
 const router = createRouter({
