@@ -8,8 +8,14 @@
     
     export default {
         props: ['event'],
+        inject: ['GStore'],
         methods: {
             register() {
+
+                this.GStore.flashMessage = 'You are successfully registred for this '+ this.event.title;
+                setTimeout(() => {
+                    this.GStore.flashMessage = ''
+                }, 3000);
                 //Call to api
                 //If registered then redirect to event details
 
