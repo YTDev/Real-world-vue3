@@ -20,9 +20,7 @@
       >Next &#62;</router-link>
 
     </div>
-    
-    
-     
+
   </div>
 </template>
 
@@ -30,7 +28,7 @@
 // @ is an alias to /src
 import EventCard from '@/components/EventCard.vue'
 import EventService from '@/services/EventService.js'
-import { watchEffect } from 'vue'
+import Nprogress from "nprogress";
 
 export default {
    
@@ -45,7 +43,7 @@ export default {
       totalEvents: 0
     }
   },
-  created() {
+  
     
     // let f1=()=>console.log(this.events);//in arrow functions this 
     // f1();
@@ -57,25 +55,41 @@ export default {
     //in vue here this automaticaly mean this.data so we can access data propreties
     //but inside a regular funtion this is undefind, with the help of arrow functions
     //this refer to created() { this } so that's good
-    watchEffect(() => {
-      this.events = null;
-      EventService.getEvents(2, this.page)
-        // .get(
-        //   'https://my-json-server.typicode.com/Code-Pop/Real-World_Vue-3/events'
-        // )
-        .then(response => {
-          this.events = response.data;
-          this.totalEvents = response.headers['x-total-count'];
-          // console.log(this.totalEvents)
-        })
-        .catch(() => {
-                                this.$router.push({
-                            name: 'NetworkError'
-                        })
+    beforeRouteEnter(routeTo, routeFrom, next) {
           
-        })
-    })
-  },
+          Nprogress.start();
+          
+          console.log("hjhj");
+          return EventService.getEvents(2, parseInt(routeTo.query.page) || 1)
+              .then(response => {
+                next(comp => {
+                  comp.events = response.data;
+                  comp.totalEvents = response.headers['x-total-count'];
+                })
+              })
+              .catch(() => {
+                next({ name: 'NetworkError' }) 
+              })
+              .finally(()=>{
+                Nprogress.done();
+              })
+          },
+    beforeRouteUpdate(routeTo) {
+          Nprogress.start();
+          return  EventService.getEvents(2, parseInt(routeTo.query.page) || 1)
+              .then(response => {
+
+                  this.events = response.data;
+                  this.totalEvents = response.headers['x-total-count'];
+
+              })
+              .catch(() => {
+                return { name: 'NetworkError' }
+              })
+              .finally(()=>{
+                Nprogress.done();
+              })
+          },
   computed: {
 
     hasNextPage() {
