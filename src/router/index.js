@@ -4,7 +4,7 @@ import EventLayout from '../views/event/layout.vue'
 import EventDetails from '../views/event/Details.vue'
 import EventRegister from '../views/event/Register.vue'
 import EventEdit from '../views/event/Edit.vue'
-import About from '../views/About.vue'
+// import About from '../views/About.vue'
 import NotFound from '@/views/NotFound.vue'
 import NetworkError from '@/views/NetworkError.vue'
 import NProgress  from 'nprogress'
@@ -13,7 +13,7 @@ import 'nprogress/nprogress.css';
 import GStore from '@/store'
 
 
-// const About = () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+const About = () => import(/* webpackChunkName: "about" */ '../views/About.vue')
 
 const routes = [
   {
