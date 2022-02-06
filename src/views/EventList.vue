@@ -1,4 +1,4 @@
-<template>
+<template role="bar">
   <h1>Events For Good</h1>
   <div class="events">
     <EventCard v-for="event in events" :key="event.id" :event="event" />
@@ -28,7 +28,8 @@
 // @ is an alias to /src
 import EventCard from '@/components/EventCard.vue'
 import EventService from '@/services/EventService.js'
-import Nprogress from "nprogress";
+// import Nprogress from "nprogress";
+// import 'nprogress/nprogress.css';
 
 export default {
    
@@ -55,27 +56,24 @@ export default {
     //in vue here this automaticaly mean this.data so we can access data propreties
     //but inside a regular funtion this is undefind, with the help of arrow functions
     //this refer to created() { this } so that's good
-    beforeRouteEnter(routeTo, routeFrom, next) {
-          
-          Nprogress.start();
-          
-          console.log("hjhj");
-          return EventService.getEvents(2, parseInt(routeTo.query.page) || 1)
-              .then(response => {
-                next(comp => {
-                  comp.events = response.data;
-                  comp.totalEvents = response.headers['x-total-count'];
-                })
-              })
-              .catch(() => {
-                next({ name: 'NetworkError' }) 
-              })
-              .finally(()=>{
-                Nprogress.done();
-              })
+  beforeRouteEnter(routeTo, routeFrom, next) {  
+    // Nprogress.start();
+    return EventService.getEvents(2, parseInt(routeTo.query.page) || 1)
+      .then(response => {
+        next(comp => {
+            comp.events = response.data;
+            comp.totalEvents = response.headers['x-total-count'];})
+            })  
+      .catch(() => {
+            next({ name: 'NetworkError' }) 
+            })
+      // .finally(()=>{
+      //       Nprogress.done();
+      //       })
           },
+    
     beforeRouteUpdate(routeTo) {
-          Nprogress.start();
+          // Nprogress.start();
           return  EventService.getEvents(2, parseInt(routeTo.query.page) || 1)
               .then(response => {
 
@@ -86,9 +84,9 @@ export default {
               .catch(() => {
                 return { name: 'NetworkError' }
               })
-              .finally(()=>{
-                Nprogress.done();
-              })
+              // .finally(()=>{
+              //   Nprogress.done();
+              // })
           },
   computed: {
 
